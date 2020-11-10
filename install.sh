@@ -18,6 +18,10 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
 cp ./vimrc ~/.vimrc
 
-
-echo "Computer minted by yours truly"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "@@@                                       @@@"
+echo "@@@    Computer minted by yours truly:    @@@"
+echo "@@@                                       @@@"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+printf "\n"
 cat ./angstyduckASCII.txt
