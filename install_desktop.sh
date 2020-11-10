@@ -23,3 +23,6 @@ apt-get install typora
 
 # install discord
 snap install discord
+
+
+./is_this_really_necessary.sh  # y e  s

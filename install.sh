@@ -27,10 +27,4 @@ source ~/.bashrc
 cp ./vimrc ~/.vimrc
 
 
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-echo "@@@                                       @@@"
-echo "@@@    Computer minted by yours truly:    @@@"
-echo "@@@                                       @@@"
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-printf "\n"
-cat ./angstyduckASCII.txt
+./is_this_really_necessary.sh  # y e  s
