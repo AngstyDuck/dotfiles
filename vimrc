@@ -41,7 +41,6 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc  " functions and packages that re
 let NERDTreeShowHidden=1  " Let NERDTree show dotfiles in the side bar
 
 
-
 " @@@ Key Mappings @@@
 let mapleader = "\<Space>"
 noremap <Leader>n :NERDTreeToggle<CR>
@@ -52,16 +51,11 @@ imap ;; <Esc>  " get out of insert mode
 
 
 
-
-
-
-
+" @@@ Misc @@@
 " Call the .vimrc.plug file (vim-plug is a vim plug-in manager)
 if filereadable(expand("~/.vimrc.plug"))
  source ~/.vimrc.plug
 endif
-
-
 
 " set realtimepath
 set rtp+=~/.fzf  " fzf integration for vim
