@@ -18,7 +18,7 @@ set scrolloff=10  " Display x lines above/below the cursor when scrolling with a
 " user interface options
 set showmatch   " Show matching brackets.
 set number  " Show line numbers
-set relativenumber  " line numbers would be relative to currently selected line
+" set relativenumber  " line numbers would be relative to currently selected line
 set cursorline  " Highlight the line currently under cursor
 set noerrorbells  " Disable beep on errors
 set background=dark  " Use colors that suit a dark background
