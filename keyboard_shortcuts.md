@@ -1,7 +1,10 @@
 ### Volume control
-```xdotool key XF86AudioRaiseVolume```
-```xdotool key XF86AudioLowerVolume```
-```xdotool key XF86AudioMute```
+- Increase volume
+  ```amixer -D pulse sset Master 5%+```
+- Decrease volume
+  ```amixer -D pulse sset Master 5%-```
+- Toggle mute
+  ```amixer -D pulse set Master 1+ toggle```
 
 ### Song control
 - Play/pause
