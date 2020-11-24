@@ -16,6 +16,7 @@ set linebreak  " Avoid wrapping a line in the middle of a word
 set scrolloff=10  " Display x lines above/below the cursor when scrolling with a mouse.
 
 " user interface options
+set clipboard=unnamedplus  " use system clipboard when copy pasting
 set showmatch   " Show matching brackets.
 set number  " Show line numbers
 " set relativenumber  " line numbers would be relative to currently selected line
