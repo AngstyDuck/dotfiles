@@ -24,5 +24,11 @@ apt-get install typora
 # install discord
 snap install discord
 
+# install slack
+cd ~/Desktop
+wget https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.2-amd64.deb
+sudo apt install -y ./slack-desktop-*.deb
+rm ./slack-desktop-*.deb
+
 
 ./is_this_really_necessary.sh  # y e  s
