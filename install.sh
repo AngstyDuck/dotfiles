@@ -2,6 +2,8 @@
 
 apt-get update
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 
 # install vim, openssh (so we can ssh into this instance)
 apt-get install -y vim openssh-server curl tmux htop
@@ -24,7 +26,16 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
 source ~/.bashrc
 
-cp ./vimrc ~/.vimrc
+cp $DIR/vimrc ~/.vimrc
+
+# generate ssh-key for github
+mkdir ~/.ssh
+ssh-keygen -t ed25519 -C "solsticedante@gmail.com" -f ~/.ssh/github -N "" -q
+echo "New pub sshkey for github:"
+cat ~/.ssh/github.pub
+
+# setup git config
+cp $DIR/gitconfig ~/.gitconfig
 
 
 ./is_this_really_necessary.sh  # y e  s
