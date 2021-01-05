@@ -1,0 +1,2 @@
+- Creation of .ssh folder is to be done by $USER instead of sudo
+- Remove creation of ssh keys; we'll get keys from keepass
