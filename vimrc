@@ -42,10 +42,30 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc  " functions and packages that re
 let NERDTreeShowHidden=1  " Let NERDTree show dotfiles in the side bar
 
 
+" @@@ ack.vim @@@
+" ref: https://www.freecodecamp.org/news/how-to-search-project-wide-vim-ripgrep-ack/
+" --vimgrep -> Needed to parse the rg response properly for ack.vim
+" --type-not sql -> Avoid huge sql file dumps as it slows down the search
+" --smart-case -> Search case insensitive if all lowercase pattern, Search case sensitively otherwise
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+" Auto close the Quickfix list after pressing '<enter>' on a list item
+let g:ack_autoclose = 1
+" Any empty ack search will search for the work the cursor is on
+let g:ack_use_cword_for_empty_search = 1
+" Don't jump to first match
+cnoreabbrev Ack Ack!
+
+
+
 " @@@ Key Mappings @@@
 let mapleader = "\<Space>"
 noremap <Leader>n :NERDTreeToggle<CR>
 noremap <Leader>f :FZF<CR>
+nnoremap <Leader>a :Ack!<Space>
+" extra options under ack
+nnoremap <Leader>s :copen<CR>
+nnoremap <Leader>d :cclose<CR>
+"""
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 imap ;; <Esc>  " get out of insert mode

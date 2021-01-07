@@ -22,6 +22,10 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
 source ~/.bashrc
 
+git clone https://github.com/mileszs/ack.vim.git ~/.vim/pack/vendor/start/ack.vim
+
+apt-get install -y ripgrep
+
 cp $DIR/vimrc ~/.vimrc
 cp $DIR/gitconfig ~/.gitconfig
 
