@@ -4,3 +4,4 @@
 - Add ssh keys from keepass to .ssh
 - Set up Slack
 - Set keyboard shortcuts
+- Set CAPS lock to ctrl_L
