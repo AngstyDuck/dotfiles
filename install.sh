@@ -39,5 +39,14 @@ cat ~/.ssh/github.pub
 echo "New pub sshkey for ssh:"
 cat ~/.ssh/id_rsa.pub
 
+# install pyenv to manage multiple python versions
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+echo '# for installing pyenv\n# ref: https://github.com/pyenv/pyenv#installation' >> ~/.bashrc
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
 
+
+exec "$SHELL"
+echo 'AngstyDuck recommends restarting all shells with `exec "$SHELL"` to ensure your shells have the newly installed packages :3'
 ./is_this_really_necessary.sh  # y e  s
