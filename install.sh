@@ -37,16 +37,6 @@ cp $DIR/vimrc ~/.vimrc
 cp $DIR/tmux.conf ~/.tmux.conf
 cp $DIR/gitconfig ~/.gitconfig
 
-# ssh key gen
-mkdir ~/.ssh
-ssh-keygen -t ed25519 -C "solsticedante@gmail.com" -f ~/.ssh/github -N "" -q
-ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa -q
-
-echo "New pub sshkey for github:"
-cat ~/.ssh/github.pub
-echo "New pub sshkey for ssh:"
-cat ~/.ssh/id_rsa.pub
-
 # install pyenv to manage multiple python versions
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 echo '# for installing pyenv\n# ref: https://github.com/pyenv/pyenv#installation' >> ~/.bashrc
