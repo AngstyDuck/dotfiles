@@ -80,3 +80,7 @@ endif
 
 " set realtimepath
 set rtp+=~/.fzf  " fzf integration for vim
+
+" for a fix for fzf
+" ref: https://github.com/junegunn/fzf.vim/issues/642
+set shell=/usr/local/bin/bash
