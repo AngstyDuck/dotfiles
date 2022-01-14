@@ -70,7 +70,7 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 imap ;; <Esc>  " get out of insert mode
 
-map <Leader>p :call InsertPDB()<CR>
+map <Leader>p :call InsertPDB()<CR><CR>
 function! InsertPDB()
   let trace = expand("__import__('pdb').set_trace()")
   execute "normal o".trace
