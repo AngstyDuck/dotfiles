@@ -30,12 +30,16 @@ mkdir ~/.tmux_plugins
 git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux_plugins/tmux-resurrect
 git clone https://github.com/tmux-plugins/tmux-continuum ~/.tmux_plugins/tmux-continuum
 git clone https://github.com/christoomey/vim-tmux-navigator.git ~/.tmux_plugins/vim-tmux-navigator
+
 # install tmux plugin manager
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 cp $DIR/vimrc ~/.vimrc
 cp $DIR/tmux.conf ~/.tmux.conf
 cp $DIR/gitconfig ~/.gitconfig
+
+# setting caps lock button to control_L instead
+echo '/usr/bin/setxkbmap -option "ctrl:nocaps"' >> ~/.bashrc
 
 # install pyenv to manage multiple python versions
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv

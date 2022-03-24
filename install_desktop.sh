@@ -15,11 +15,10 @@ curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | apt-key add -
 echo "deb http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
 apt-get update && apt-get install -y spotify-client
 
-# install typora
-wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
-add-apt-repository 'deb https://typora.io/linux ./'
-apt-get update
-apt-get install typora
+# install ghostwriter
+sudo add-apt-repository -y ppa:wereturtle/ppa
+sudo apt update
+sudo apt install -y ghostwriter
 
 # install discord
 snap install discord
