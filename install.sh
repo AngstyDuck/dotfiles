@@ -38,9 +38,6 @@ cp $DIR/vimrc ~/.vimrc
 cp $DIR/tmux.conf ~/.tmux.conf
 cp $DIR/gitconfig ~/.gitconfig
 
-# setting caps lock button to control_L instead
-echo '/usr/bin/setxkbmap -option "ctrl:nocaps"' >> ~/.bashrc
-
 # install pyenv to manage multiple python versions
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 echo '# for installing pyenv\n# ref: https://github.com/pyenv/pyenv#installation' >> ~/.bashrc
