@@ -90,3 +90,7 @@ set rtp+=~/.fzf  " fzf integration for vim
 " for a fix for fzf
 " ref: https://github.com/junegunn/fzf.vim/issues/642
 set shell=/usr/local/bin/bash
+
+" use 'darker' linter for files with .py suffix whenever we save file
+set autoread
+autocmd BufWritePost *.py silent :!darker %
