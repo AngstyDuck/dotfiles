@@ -94,3 +94,6 @@ set shell=/usr/local/bin/bash
 " use 'darker' linter for files with .py suffix whenever we save file
 set autoread
 autocmd BufWritePost *.py silent :!darker %
+
+" Default to not read-only in vimdiff
+set noro
