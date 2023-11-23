@@ -22,3 +22,7 @@ ENV xpack.security.enabled=false
 
 # Expose ports (default Elasticsearch ports)
 EXPOSE 9200 9300
+
+# run the following commands on cli in this directory
+# sudo docker build -t es_8_11 -f ./elasticsearch_8_11 .
+# sudo docker run --name es_8_11 -d -p 9200:9200 -p 9300:9300 es_8_11
