@@ -47,5 +47,5 @@ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nf
 
 
 exec "$SHELL"
-echo 'AngstyDuck recommends restarting all shells with `exec "$SHELL"` to ensure your shells have the newly installed packages :3'
+echo 'AngstyDuck recommends restarting all shells with `exec "$SHELL"` to ensure your shells have the newly installed packages uwu <3'
 ./is_this_really_necessary.sh  # y e  s
