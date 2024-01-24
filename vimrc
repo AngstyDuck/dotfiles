@@ -97,3 +97,8 @@ autocmd BufWritePost *.py silent :!darker %
 
 " Default to not read-only in vimdiff
 set noro
+
+" bugfix for slow typescript regex is to disable old regex engine
+" hence enabling new regex engine
+" ref: https://jameschambers.co.uk/vim-typescript-slow
+set re=0
