@@ -11,6 +11,10 @@ apt-get install -y python3-pip
 sudo -u $USER pip3 install virtualenv
 
 # install vim plugins
+# vim plugin manager
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 mkdir -p ~/.vim/pack/vendor/start
 git clone git://github.com/ajh17/VimCompletesMe.git ~/.vim/pack/vendor/start/VimCompletesMe
 git clone https://github.com/preservim/nerdtree.git ~/.vim/pack/vendor/start/nerdtree
