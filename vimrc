@@ -70,6 +70,18 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 imap ;; <Esc>  " get out of insert mode
 
+map <Leader>p :call ConsoleLogGo()<CR><CR>
+function! ConsoleLogGo()
+  let trace = expand('fmt.Println("@@@ PING")')
+  execute "normal o".trace
+endfunction
+
+map <Leader>p :call ConsoleLogJs()<CR><CR>
+function! ConsoleLogJs()
+  let trace = expand("console.log('@@@ PING');")
+  execute "normal o".trace
+endfunction
+
 map <Leader>p :call InsertPDB()<CR><CR>
 function! InsertPDB()
   let trace = expand("__import__('pdb').set_trace()")
