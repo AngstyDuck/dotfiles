@@ -12,15 +12,17 @@ vim.opt.formatoptions:remove("o") -- Don't continue comments with 'o' or 'O'
 vim.opt.formatoptions:remove("r") -- Don't continue comments when pressing Enter
 vim.opt.formatoptions:remove("c") -- Don't auto-wrap comments
 vim.opt.cursorline = true -- highlight cursorline
-vim.opt.tabstop = true -- highlight cursorline
+vim.opt.tabstop = 4 -- highlight cursorline
 -- Set misc configs END
 
 -- 🔥 Key Mappings START
 vim.g.mapleader = " "
 vim.keymap.set("n", "<Leader>w", ":w<CR>", { silent = true })
 vim.keymap.set("n", "<Leader>q", ":q<CR>", { silent = true })
-vim.keymap.set("n", "<C-z>", "<Nop>", { silent = true })
+vim.keymap.set("n", "<C-z>", "<Nop>", { silent = true })  -- prevent freezing of vim when you press ctrl-z
 vim.keymap.set("i", ";;", "<Esc>", { silent = true })
+vim.keymap.set("v", "<C-c>", '"+y', { silent = true })
+vim.keymap.set("n", "<C-v>", '"+p', { silent = true })
 -- 🔥 Key Mappings END
 
 -- Bootstrap lazy.nvim START
