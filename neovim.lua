@@ -6,10 +6,16 @@ Set up:
 
 ]]--
 
--- Set leader key
-vim.g.mapleader = " "
+-- Set misc configs START
+vim.opt.number = true -- Turn on absolute line numbers
+vim.opt.formatoptions:remove("o") -- Don't continue comments with 'o' or 'O'
+vim.opt.formatoptions:remove("r") -- Don't continue comments when pressing Enter
+vim.opt.formatoptions:remove("c") -- Don't auto-wrap comments
+vim.opt.cursorline = true -- highlight cursorline
+-- Set misc configs END
 
 -- 🔥 Key Mappings START
+vim.g.mapleader = " "
 vim.keymap.set("n", "<Leader>w", ":w<CR>", { silent = true })
 vim.keymap.set("n", "<Leader>q", ":q<CR>", { silent = true })
 vim.keymap.set("n", "<C-z>", "<Nop>", { silent = true })
