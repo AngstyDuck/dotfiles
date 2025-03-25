@@ -12,6 +12,7 @@ vim.opt.formatoptions:remove("o") -- Don't continue comments with 'o' or 'O'
 vim.opt.formatoptions:remove("r") -- Don't continue comments when pressing Enter
 vim.opt.formatoptions:remove("c") -- Don't auto-wrap comments
 vim.opt.cursorline = true -- highlight cursorline
+vim.opt.tabstop = true -- highlight cursorline
 -- Set misc configs END
 
 -- 🔥 Key Mappings START

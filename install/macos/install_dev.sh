@@ -13,7 +13,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm # install tmux
 
 # move config files
 mkdir -p ~/.config/nvim
-cp $DIR/../../neovim.lua ~/.config/nvim/neovim.lua
+ln -s $DIR/../../neovim.lua ~/.config/nvim/init.lua
 cp $DIR/../../tmux.conf ~/.tmux.conf
 cp $DIR/../../gitconfig ~/.gitconfig
 
