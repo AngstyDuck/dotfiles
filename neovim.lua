@@ -2,6 +2,10 @@
 
 Set up:
 1. Copy this file into ~/.config/nvim/init.lua
+```
+mkdir -p ~/.config/nvim
+cp ./neovim.lua ~/.config/nvim/init.lua
+```
 2. After opening nvim, run the command `:Lazy install`
 
 ]]--
@@ -12,17 +16,23 @@ vim.opt.formatoptions:remove("o") -- Don't continue comments with 'o' or 'O'
 vim.opt.formatoptions:remove("r") -- Don't continue comments when pressing Enter
 vim.opt.formatoptions:remove("c") -- Don't auto-wrap comments
 vim.opt.cursorline = true -- highlight cursorline
-vim.opt.tabstop = 4 -- highlight cursorline
+vim.opt.tabstop = 8       -- A tab character is 8 spaces wide
+vim.opt.shiftwidth = 4    -- Indent levels are 4 spaces
+vim.opt.expandtab = true  -- Use spaces instead of tabs
+vim.opt.smarttab = true
+vim.opt.softtabstop = 0
 -- Set misc configs END
 
 -- 🔥 Key Mappings START
 vim.g.mapleader = " "
 vim.keymap.set("n", "<Leader>w", ":w<CR>", { silent = true })
+vim.keymap.set("n", "<Leader>W", ":wall<CR>", { silent = true, desc = "save all edited files" })
 vim.keymap.set("n", "<Leader>q", ":q<CR>", { silent = true })
-vim.keymap.set("n", "<C-z>", "<Nop>", { silent = true })  -- prevent freezing of vim when you press ctrl-z
+vim.keymap.set("n", "<C-z>", "<Nop>", { silent = true, desc = "prevent freezing of vim when you press ctrl-z" })
 vim.keymap.set("i", ";;", "<Esc>", { silent = true })
-vim.keymap.set("v", "<C-c>", '"+y', { silent = true })
-vim.keymap.set("n", "<C-v>", '"+p', { silent = true })
+vim.keymap.set("v", "<Leader>c", '"+y', { silent = true, desc = "copy from clipboard" })
+vim.keymap.set("n", "<Leader>v", '"+p', { silent = true, desc = "paste from clipboard" })
+vim.keymap.set("n", "<Leader>p", '<Cmd>wall<CR><Cmd>Prettier<CR><Cmd>bufdo e<CR>', { silent = true, desc = "Save all files, run custom command Prettier, reload all opened files" })
 -- 🔥 Key Mappings END
 
 -- Bootstrap lazy.nvim START
@@ -72,7 +82,7 @@ require("lazy").setup({
             group_empty = true,
           },  
           filters = { 
-            dotfiles = true,
+            dotfiles = false,
           },
         }
       end,
@@ -105,3 +115,29 @@ vim.keymap.set("n", "<Leader>n", ":NvimTreeToggle<CR>", { silent = true })
 vim.keymap.set("n", "<Leader>f", ":FZF<CR>", { silent = true })  -- search for files
 vim.keymap.set("n", "<Leader>r", ":Rg<CR>", { silent = true })  -- search for strings
 -- junegunn/fzf.vim END
+
+-- Custom commands START
+-- Run prettier on all files that are edited since the HEAD of the current branch START
+vim.api.nvim_create_user_command("Prettier", function()
+  local handle = io.popen("git ls-files --modified --others --exclude-standard | grep -E '\\.(js|ts|jsx|tsx|css|scss|html|json|md)$'")
+  local result = handle:read("*a")
+  handle:close()
+
+  for file in result:gmatch("[^\r\n]+") do
+    vim.fn.jobstart({ "prettier", "--write", file }, {
+      stdout_buffered = true,
+      on_stdout = function(_, data)
+        if data then
+          print(table.concat(data, "\n"))
+        end
+      end,
+      on_stderr = function(_, data)
+        if data then
+          vim.api.nvim_err_writeln(table.concat(data, "\n"))
+        end
+      end,
+    })
+  end
+end, {})
+-- Run prettier on all files that are edited since the HEAD of the current branch END
+-- Custom commands END
