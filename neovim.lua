@@ -27,6 +27,7 @@ vim.opt.softtabstop = 0
 vim.g.mapleader = " "
 vim.keymap.set("n", "<Leader>w", ":w<CR>", { silent = true })
 vim.keymap.set("n", "<Leader>W", ":wall<CR>", { silent = true, desc = "save all edited files" })
+vim.keymap.set("n", "<Leader>e", ":bufdo e<CR>", { silent = true, desc = "reload all opened files" })
 vim.keymap.set("n", "<Leader>q", ":q<CR>", { silent = true })
 vim.keymap.set("n", "<C-z>", "<Nop>", { silent = true, desc = "prevent freezing of vim when you press ctrl-z" })
 vim.keymap.set("i", ";;", "<Esc>", { silent = true })
