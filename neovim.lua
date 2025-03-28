@@ -21,6 +21,9 @@ vim.opt.shiftwidth = 4    -- Indent levels are 4 spaces
 vim.opt.expandtab = true  -- Use spaces instead of tabs
 vim.opt.smarttab = true
 vim.opt.softtabstop = 0
+vim.opt.hlsearch = true  -- Highlight matching search patterns
+vim.opt.ignorecase = true  -- Include matching uppercase words with lowercase search term
+vim.opt.smartcase = true  -- Include only uppercase words with uppercase search term
 -- Set misc configs END
 
 -- 🔥 Key Mappings START
@@ -35,6 +38,30 @@ vim.keymap.set("v", "<Leader>c", '"+y', { silent = true, desc = "copy from clipb
 vim.keymap.set("n", "<Leader>v", '"+p', { silent = true, desc = "paste from clipboard" })
 vim.keymap.set("n", "<Leader>p", '<Cmd>wall<CR><Cmd>Prettier<CR><Cmd>bufdo e<CR>', { silent = true, desc = "Save all files, run custom command Prettier, reload all opened files" })
 -- 🔥 Key Mappings END
+
+-- Custom logging functions START
+local function ConsoleLogGo()
+  local trace = 'fmt.Println("@@@ PING")'
+  vim.api.nvim_put({trace}, "l", true, true)
+end
+
+local function ConsoleLogJs()
+  local lines = {
+    "console.log('@@@ ');",
+    "console.log(JSON.stringify(, null, 4));",
+  }
+  vim.api.nvim_put(lines, "l", true, true)
+end
+
+local function InsertPDB()
+  local trace = "__import__('pdb').set_trace()"
+  vim.api.nvim_put({trace}, "l", true, true)
+end
+
+vim.keymap.set("n", "<Leader>3", ConsoleLogGo)
+vim.keymap.set("n", "<Leader>2", ConsoleLogJs)
+vim.keymap.set("n", "<Leader>1", InsertPDB)
+-- Custom logging functions END
 
 -- Bootstrap lazy.nvim START
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -94,6 +121,67 @@ require("lazy").setup({
         "junegunn/fzf",
       },
     },
+  {
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    dependencies = {
+      -- Sources for cmp
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "saadparwaiz1/cmp_luasnip",
+      -- Snippet engine
+      "L3MON4D3/LuaSnip",
+      "rafamadriz/friendly-snippets",
+    },
+    config = function()
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+
+      require("luasnip.loaders.from_vscode").lazy_load()
+
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+        }),
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "luasnip" },
+        }, {
+          { name = "buffer" },
+          { name = "path" },
+        }),
+      })
+    end,
+  },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
