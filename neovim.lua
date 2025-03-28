@@ -91,7 +91,7 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim START
 require("lazy").setup({
   spec = {
-    {
+    {  -- adds folder tree in editor
       "nvim-tree/nvim-tree.lua",
       version = "*",
       lazy = false,
@@ -115,74 +115,104 @@ require("lazy").setup({
         }
       end,
     },
-    {
+    {  -- allows us to jump to different pages. also rg's root directory and jumps to results
       "junegunn/fzf.vim",
       dependencies = {
         "junegunn/fzf",
       },
     },
-  {
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
-    dependencies = {
-      -- Sources for cmp
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-cmdline",
-      "saadparwaiz1/cmp_luasnip",
-      -- Snippet engine
-      "L3MON4D3/LuaSnip",
-      "rafamadriz/friendly-snippets",
-    },
-    config = function()
-      local cmp = require("cmp")
-      local luasnip = require("luasnip")
+      {  -- autocomplete
+        "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
+        dependencies = {
+          -- Sources for cmp
+          "hrsh7th/cmp-nvim-lsp",
+          "hrsh7th/cmp-buffer",
+          "hrsh7th/cmp-path",
+          "hrsh7th/cmp-cmdline",
+          "saadparwaiz1/cmp_luasnip",
+          -- Snippet engine
+          "L3MON4D3/LuaSnip",
+          "rafamadriz/friendly-snippets",
+        },
+        config = function()
+          local cmp = require("cmp")
+          local luasnip = require("luasnip")
 
-      require("luasnip.loaders.from_vscode").lazy_load()
+          require("luasnip.loaders.from_vscode").lazy_load()
 
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
+          cmp.setup({
+            snippet = {
+              expand = function(args)
+                luasnip.lsp_expand(args.body)
+              end,
+            },
+            mapping = cmp.mapping.preset.insert({
+              ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+              ["<C-f>"] = cmp.mapping.scroll_docs(4),
+              ["<C-Space>"] = cmp.mapping.complete(),
+              ["<C-e>"] = cmp.mapping.abort(),
+              ["<CR>"] = cmp.mapping.confirm({ select = true }),
+              ["<Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                  cmp.select_next_item()
+                elseif luasnip.expand_or_jumpable() then
+                  luasnip.expand_or_jump()
+                else
+                  fallback()
+                end
+              end, { "i", "s" }),
+              ["<S-Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                  cmp.select_prev_item()
+                elseif luasnip.jumpable(-1) then
+                  luasnip.jump(-1)
+                else
+                  fallback()
+                end
+              end, { "i", "s" }),
+            }),
+            sources = cmp.config.sources({
+              { name = "nvim_lsp" },
+              { name = "luasnip" },
+            }, {
+              { name = "buffer" },
+              { name = "path" },
+            }),
+          })
+        end,
+      },
+      {  -- jump to definition
+        -- requires running `npm install -g typescript typescript-language-server` for typescript
+        "pmizio/typescript-tools.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        event = { "BufReadPre", "BufNewFile" },
+        opts = {
+          -- Optional: Enable formatting if you want ts-ls to handle it
+          -- You might want to set this false if you're using prettier or eslint
+          settings = {
+            tsserver_file_preferences = {
+              includeInlayParameterNameHints = "all",
+              includeCompletionsForModuleExports = true,
+            },
+          },
+          on_attach = function(client, bufnr)
+            local map = function(mode, lhs, rhs)
+              vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, { noremap = true, silent = true })
+            end
+
+            -- LSP keymaps
+            map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+            map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+            map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+            map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+            map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+            map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
           end,
         },
-        mapping = cmp.mapping.preset.insert({
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-          ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-        }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-        }, {
-          { name = "buffer" },
-          { name = "path" },
-        }),
-      })
-    end,
+      },
   },
-  },
+
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
