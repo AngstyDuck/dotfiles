@@ -24,6 +24,7 @@ vim.opt.softtabstop = 0
 vim.opt.hlsearch = true  -- Highlight matching search patterns
 vim.opt.ignorecase = true  -- Include matching uppercase words with lowercase search term
 vim.opt.smartcase = true  -- Include only uppercase words with uppercase search term
+vim.opt.mouse = ""  -- enable mouse for all modes
 -- Set misc configs END
 
 -- 🔥 Key Mappings START
@@ -32,12 +33,14 @@ vim.keymap.set("n", "<Leader>w", ":w<CR>", { silent = true })
 vim.keymap.set("n", "<Leader>W", ":wall<CR>", { silent = true, desc = "save all edited files" })
 vim.keymap.set("n", "<Leader>e", ":bufdo e<CR>", { silent = true, desc = "reload all opened files" })
 vim.keymap.set("n", "<Leader>q", ":q<CR>", { silent = true })
+vim.keymap.set("n", "<Leader>Q", ":qa<CR>", { silent = true, desc = "close all windows and tabs" })
 vim.keymap.set("n", "<C-z>", "<Nop>", { silent = true, desc = "prevent freezing of vim when you press ctrl-z" })
 vim.keymap.set("i", ";;", "<Esc>", { silent = true })
 vim.keymap.set("v", "<Leader>c", '"+y', { silent = true, desc = "copy from clipboard" })
 vim.keymap.set("n", "<Leader>v", '"+p', { silent = true, desc = "paste from clipboard" })
 vim.keymap.set("n", "<Leader>p", '<Cmd>wall<CR><Cmd>Prettier<CR><Cmd>bufdo e<CR>', { silent = true, desc = "Save all files, run custom command Prettier, reload all opened files" })
 -- 🔥 Key Mappings END
+
 
 -- Custom logging functions START
 local function ConsoleLogGo()
@@ -87,7 +90,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 -- Bootstrap lazy.nvim END
 
-
 -- Setup lazy.nvim START
 require("lazy").setup({
   spec = {
@@ -121,6 +123,59 @@ require("lazy").setup({
         "junegunn/fzf",
       },
     },
+      {  -- jump to definition
+        -- requires running `npm install -g typescript typescript-language-server` for typescript
+        "pmizio/typescript-tools.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        event = { "BufReadPre", "BufNewFile" },
+        opts = {
+          -- Optional: Enable formatting if you want ts-ls to handle it
+          -- You might want to set this false if you're using prettier or eslint
+          settings = {
+            tsserver_file_preferences = {
+              includeCompletionsForModuleExports = true,
+            },
+            tsserver = {
+                disable_diagnostics = true,
+            },
+          },
+          on_attach = function(client, bufnr)
+            local map = function(mode, lhs, rhs)
+              vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, { noremap = true, silent = true })
+            end
+
+            -- LSP keymaps
+            map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+            map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+            map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+            map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+            map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+            map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+          end,
+        },
+      },
+    {  -- save tabs and windows when quitting sessions, reopening when neovim is running again
+      "rmagatti/auto-session",
+      config = function()
+        require("auto-session").setup({
+          log_level = "error",
+          auto_session_enabled = true,
+          auto_save_enabled = true,
+          auto_restore_enabled = true,
+          auto_session_suppress_dirs = { "~/" }, -- optional: don't auto-save in home dir
+        })
+      end,
+    }
+  },
+
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "habamax" } },
+  -- disable check for plugin updates cos of spam and noise
+  checker = { enabled = false },
+})
+   
+--[[
       {  -- autocomplete
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
@@ -182,43 +237,7 @@ require("lazy").setup({
           })
         end,
       },
-      {  -- jump to definition
-        -- requires running `npm install -g typescript typescript-language-server` for typescript
-        "pmizio/typescript-tools.nvim",
-        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-        event = { "BufReadPre", "BufNewFile" },
-        opts = {
-          -- Optional: Enable formatting if you want ts-ls to handle it
-          -- You might want to set this false if you're using prettier or eslint
-          settings = {
-            tsserver_file_preferences = {
-              includeInlayParameterNameHints = "all",
-              includeCompletionsForModuleExports = true,
-            },
-          },
-          on_attach = function(client, bufnr)
-            local map = function(mode, lhs, rhs)
-              vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, { noremap = true, silent = true })
-            end
-
-            -- LSP keymaps
-            map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
-            map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-            map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-            map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-            map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-            map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-          end,
-        },
-      },
-  },
-
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "habamax" } },
-  -- automatically check for plugin updates
-  checker = { enabled = true },
-})
+]]--
 -- Setup lazy.nvim END
 
 -- nvim-tree/nvim-tree.lua START
@@ -260,3 +279,6 @@ vim.api.nvim_create_user_command("Prettier", function()
 end, {})
 -- Run prettier on all files that are edited since the HEAD of the current branch END
 -- Custom commands END
+
+-- for jump to definition, set up go language server
+require('lspconfig').gopls.setup({})
