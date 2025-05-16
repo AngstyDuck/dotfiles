@@ -165,7 +165,7 @@ require("lazy").setup({
           auto_session_suppress_dirs = { "~/" }, -- optional: don't auto-save in home dir
         })
       end,
-    }
+    },
   },
 
   -- Configure any other settings here. See the documentation for more details.
@@ -254,10 +254,12 @@ vim.keymap.set("n", "<Leader>f", ":FZF<CR>", { silent = true })  -- search for f
 vim.keymap.set("n", "<Leader>r", ":Rg<CR>", { silent = true })  -- search for strings
 -- junegunn/fzf.vim END
 
+
 -- Custom commands START
 -- Run prettier on all files that are edited since the HEAD of the current branch START
 vim.api.nvim_create_user_command("Prettier", function()
-  local handle = io.popen("git ls-files --modified --others --exclude-standard | grep -E '\\.(js|ts|jsx|tsx|css|scss|html|json|md)$'")
+  -- local handle = io.popen("git ls-files --modified --others --exclude-standard | grep -E '\\.(js|ts|jsx|tsx|css|scss|html|json|md)$'")
+  local handle = io.popen("{ git diff --name-only --cached; git ls-files --modified --others --exclude-standard; } | sort -u | grep -E '\\.(js|ts|jsx|tsx|css|scss|html|json|md)$'")
   local result = handle:read("*a")
   handle:close()
 
